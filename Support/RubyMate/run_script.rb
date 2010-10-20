@@ -6,7 +6,17 @@ TextMate.save_current_document
 is_test_script = ENV["TM_FILEPATH"] =~ /(?:\b|_)(?:tc|ts|test)(?:\b|_)/ or
   File.read(ENV["TM_FILEPATH"]) =~ /\brequire\b.+(?:test\/unit|test_helper)/
 
-cmd = [ENV['TM_RUBY'] || 'ruby', '-rcatch_exception']
+ruby = nil
+rvm_path = "#{ENV["HOME"]}/.rvm/scripts/rvm"
+rvmrc_path = "#{ENV["TM_PROJECT_DIRECTORY"]}/.rvmrc"
+
+if File.exist?(rvm_path) && File.exist?(rvmrc_path)
+  ruby = `. #{rvmrc_path} && which ruby`.strip
+end
+
+ruby ||= ENV['TM_RUBY'] || 'ruby'
+
+cmd = [ruby, '-rcatch_exception']
 
 if is_test_script and not ENV['TM_FILE_IS_UNTITLED']
   path_ary = (ENV['TM_ORIG_FILEPATH'] || ENV['TM_FILEPATH']).split("/")
@@ -23,6 +33,8 @@ if is_test_script and not ENV['TM_FILE_IS_UNTITLED']
 end
 
 cmd << ENV["TM_FILEPATH"]
+
+Dir.chdir ENV["TM_PROJECT_DIRECTORY"]
 
 TextMate::Executor.run(cmd, :version_args => ["--version"]) do |str, type|
   case type
