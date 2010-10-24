@@ -62,7 +62,7 @@ if mode.nil? then
 
   term, documentation = ri(term)
 
-  html_header("Documentation for ‘#{term}’", "RDoc", <<-HTML)
+  html_header("Documentation for '#{term}'", "RDoc", <<-HTML)
 <script type="text/javascript" charset="utf-8">
   function ri (arg, _history) {
     TextMate.isBusy = true;
