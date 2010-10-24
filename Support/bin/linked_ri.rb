@@ -95,7 +95,7 @@ HTML
   html_footer
   TextMate.exit_show_html
 elsif mode == 'js' then
-  documentation = h(`#{RI_EXE} -T -f plain #{e_sh term}`) \
+  documentation = (`#{RI_EXE} -T -f html #{e_sh term}`) \
     rescue "<h1>ri Command Error.</h1>"
 
   documentation.gsub!(/(\s|^)\+(\w+)\+(\s|$)/, "\\1<code>\\2</code>\\3")
